@@ -1,0 +1,19 @@
+{% extends 'base.twig' %}
+
+
+
+{% block content %}
+<h2>Login</h2>
+
+{{ flash.error|raw }} <br />
+
+<form action="" method="POST">
+
+<label>Username: </label>
+<input type="text" name="username" maxlength="40" value="{{username}}"> <br />
+<label>Password: </label>
+<input type="password" name="password" maxlength="40"> <br />
+<input type="submit" name="submit" value="Log in">
+</form>
+{% endblock %}
+
