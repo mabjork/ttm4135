@@ -12,7 +12,7 @@ class UserController extends Controller
         parent::__construct();
     }
 
-    function index()     
+    function index()
     {
         if (Auth::guest()) {
             $this->render('newUserForm.twig', []);
@@ -23,9 +23,9 @@ class UserController extends Controller
         }
     }
 
-    function create()		  
+    function create()
     {
-        
+
         $issuer = (isset($_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN']))?$_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN']:false;
         $rightissuer = in_array($issuer,array('Student CA','Staff CA'));
 	//echo'qwerasdf';var_dump($rightissuer);exit;
@@ -34,6 +34,7 @@ class UserController extends Controller
             $this->app->flashNow('error', 'You must be a member of ttm4135 to register.');
     		$this->app->redirect('/register');
     	}
+
         $request = $this->app->request;
         $username = $request->post('username');
         $password = $request->post('password');
@@ -42,7 +43,10 @@ class UserController extends Controller
         $user = User::makeEmpty();
         $user->setUsername($username);
         $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
-	
+
+        if($_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN'] == 'Staff CA'){
+            $user->setIsAdmin("1");
+        }
 
         if($request->post('email'))
         {
@@ -79,7 +83,7 @@ class UserController extends Controller
     {
       if(Auth::isAdmin()){
           $request = $this->app->request;
-          $userlist = $request->post('userlist'); 
+          $userlist = $request->post('userlist');
           $deleted = [];
 
           if($userlist == NULL){
@@ -104,7 +108,7 @@ class UserController extends Controller
     }
 
 
-    function show($tuserid)   
+    function show($tuserid)
     {
         if(Auth::userAccess($tuserid))
         {
@@ -120,7 +124,7 @@ class UserController extends Controller
     }
 
     function newuser()
-    { 
+    {
 
         $user = User::makeEmpty();
 
@@ -135,7 +139,7 @@ class UserController extends Controller
             $bio = $request->post('bio');
 
             $isAdmin = ($request->post('isAdmin') != null);
-            
+
 
             $user->setUsername($username);
             $user->setPassword($password);
@@ -156,8 +160,8 @@ class UserController extends Controller
         }
     }
 
-    function edit($tuserid)    
-    { 
+    function edit($tuserid)
+    {
 
         $user = User::findById($tuserid);
 
@@ -174,7 +178,7 @@ class UserController extends Controller
             $bio = $request->post('bio');
 
             $isAdmin = ($request->post('isAdmin') != null);
-            
+
 
             $user->setUsername($username);
             $user->setPassword($password);
