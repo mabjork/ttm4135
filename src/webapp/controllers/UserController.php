@@ -30,8 +30,8 @@ class UserController extends Controller
         $rightissuer = in_array($issuer,array('Student CA','Staff CA'));
         
     	if (!$issuer||!$rightissuer){
-            //$this->setFlashMessage('You must be a member of ttm4135 to register. Besides, I should change some code...','error');
-            $this->app->flashNow('error', 'You must be a member of ttm4135 to register. Besides, I should change some code...');
+            $this->setFlashMessage('You must be a member of ttm4135 to register. Besides, I should change some code...','error');
+            //$this->app->flashNow('error', 'You must be a member of ttm4135 to register. Besides, I should change some code...');
     		$this->app->redirect('/register');
     	}
         $request = $this->app->request;

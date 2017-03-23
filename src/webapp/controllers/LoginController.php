@@ -33,7 +33,7 @@ class LoginController extends Controller
         $password = $request->post('password');
 
         #was us       
-        $cookie_name = "username";
+        $cookie_name = "user";
         $cookie_value = $username;
         setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
 
