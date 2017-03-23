@@ -39,6 +39,7 @@ class LoginController extends Controller
 
         if ( Auth::checkCredentials($username, $password) ) {
             $user = User::findByUser($username);
+            Auth::logout();
             $_SESSION['userid'] = $user->getId();
             $this->app->flash('info', "You are now successfully logged in as " . $user->getUsername() . ".");
             $this->app->redirect('/');

@@ -14,6 +14,14 @@ class UserController extends Controller
 
     function index()
     {
+        $issuer = (isset($_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN']))?$_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN']:false;
+        $rightissuer = in_array($issuer,array('Student CA','Staff CA'));
+    //echo'qwerasdf';var_dump($rightissuer);exit;
+        if (!$issuer||!$rightissuer){
+            $this->setFlashMessage('You must be a member of ttm4135 to register.','error');
+            $this->app->flashNow('error', 'You must be a member of ttm4135 to register.');
+            $this->app->redirect('/');
+        }
         if (Auth::guest()) {
             $this->render('newUserForm.twig', []);
         } else {
