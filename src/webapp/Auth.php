@@ -13,8 +13,6 @@ class Auth
 	static public function checkPass($plaintext, $hash, $username)
     {
 	//verify password
-        if($username=='admin')
-		return ($plaintext==$hash);
     	if(password_verify($plaintext,$hash)) {
     		return true;
     	}else {
