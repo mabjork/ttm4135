@@ -15,6 +15,7 @@ class User
     protected $email;
     protected $bio = 'Bio is empty.';
     protected $isAdmin = 0;
+    protected $stmt
 
     static $app;
 
@@ -43,13 +44,20 @@ class User
     function save()
     {
         if ($this->id === null) {
+            self::$stmt = $app->db->prepare(self::INSERT_QUERY);
+            self::$stmt->bind_param("ssssi", $username, $password, $email,$bio,$isAdmin);
+            /*
             $query = sprintf(self::INSERT_QUERY,
                 $this->username,
                 $this->password,
                 $this->email,
                 $this->bio,
                 $this->isAdmin            );
+            */
         } else {
+            self::$stmt = $app->db->prepare(self::UPDATE_QUERY);
+            self::$stmt->bind_param("ssssii", $username, $password, $email,$bio,$isAdmin,$id);
+          /*
           $query = sprintf(self::UPDATE_QUERY,
                 $this->username,
                 $this->password,
@@ -58,17 +66,17 @@ class User
                 $this->isAdmin,
                 $this->id
             );
+          */
         }
 
-        return self::$app->db->exec($query);
+        return self::$stmt->execute();
     }
 
     function delete()
     {
-        $query = sprintf(self::DELETE_QUERY,
-            $this->id
-        );
-        return self::$app->db->exec($query);
+        $stmt = $app->db->prepare(self::INSERT_QUERY);
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
     }
 
     function getId()
@@ -139,8 +147,11 @@ class User
      */
     static function findById($userid)
     {
-        $query = sprintf(self::FIND_BY_ID_QUERY, $userid);
-        $result = self::$app->db->query($query, \PDO::FETCH_ASSOC);
+        $stmt = $db->prepare(self::FIND_BY_ID_QUERY);
+        $stmt->bind_param("i", this::$id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
         $row = $result->fetch();
 
         if($row == false) {
@@ -158,8 +169,11 @@ class User
      */
     static function findByUser($username)
     {
-        $query = sprintf(self::FIND_BY_NAME_QUERY, $username);
-        $result = self::$app->db->query($query, \PDO::FETCH_ASSOC);
+        $stmt = $db->prepare(self::FIND_BY_NAME_QUERY);
+        $stmt->bind_param("s", this::$username);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
         $row = $result->fetch();
 
         if($row == false) {
@@ -169,7 +183,7 @@ class User
         return User::makeFromSql($row);
     }
 
-    
+
     static function all()
     {
         $query = "SELECT * FROM users";
@@ -201,4 +215,3 @@ class User
 
 
   User::$app = \Slim\Slim::getInstance();
-
