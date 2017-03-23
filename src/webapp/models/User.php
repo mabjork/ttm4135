@@ -44,11 +44,11 @@ class User
     {
         if ($this->id === null) {
             $stmt = self::$app->db->prepare(self::INSERT_QUERY);
-            $stmt->bindParam(1, $username);
-            $stmt->bindParam(2, $password);
-            $stmt->bindParam(3, $email);
-            $stmt->bindParam(4, $bio);
-            $stmt->bindParam(5, $isAdmin);
+            $stmt->bindParam(1, $this->username);
+            $stmt->bindParam(2, $this->password);
+            $stmt->bindParam(3, $this->email);
+            $stmt->bindParam(4, $this->bio);
+            $stmt->bindParam(5, $this->isAdmin);
             /*
             $query = sprintf(self::INSERT_QUERY,
                 $this->username,
@@ -60,12 +60,12 @@ class User
         } else {
             $stmt = self::$app->db->prepare(self::UPDATE_QUERY);
             $stmt->bind_param("ssssii", $username, $password, $email,$bio,$isAdmin,$id);
-            $stmt->bindParam(1, $username);
-            $stmt->bindParam(2, $password);
-            $stmt->bindParam(3, $email);
-            $stmt->bindParam(4, $bio);
-            $stmt->bindParam(5, $isAdmin);
-            $stmt->bindParam(6, $id);
+            $stmt->bindParam(1, $this->username);
+            $stmt->bindParam(2, $this->password);
+            $stmt->bindParam(3, $this->email);
+            $stmt->bindParam(4, $this->bio);
+            $stmt->bindParam(5, $this->isAdmin);
+            $stmt->bindParam(6, $this->id);
           /*
           $query = sprintf(self::UPDATE_QUERY,
                 $this->username,
@@ -157,7 +157,7 @@ class User
     static function findById($userid)
     {
         $stmt = self::$app->db->prepare(self::FIND_BY_ID_QUERY);
-        $stmt->bind_param(1, this::$id);
+        $stmt->bind_param(1, $this->id);
         $stmt->execute();
 
         $result = $stmt->get_result();
@@ -179,7 +179,7 @@ class User
     static function findByUser($username)
     {
         $stmt = self::$app->db->prepare(self::FIND_BY_NAME_QUERY);
-        $stmt->bindParam(1, this::$username);
+        $stmt->bindParam(1, $this->username);
         $stmt->execute();
 
         $result = $stmt->get_result();
