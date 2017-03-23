@@ -15,7 +15,6 @@ class User
     protected $email;
     protected $bio = 'Bio is empty.';
     protected $isAdmin = 0;
-    protected $stmt
 
     static $app;
 
@@ -44,8 +43,8 @@ class User
     function save()
     {
         if ($this->id === null) {
-            self::$stmt = $app->db->prepare(self::INSERT_QUERY);
-            self::$stmt->bind_param("ssssi", $username, $password, $email,$bio,$isAdmin);
+            $stmt = self::$app->db->prepare(self::INSERT_QUERY);
+            $stmt->bind_param("ssssi", $username, $password, $email,$bio,$isAdmin);
             /*
             $query = sprintf(self::INSERT_QUERY,
                 $this->username,
@@ -55,8 +54,8 @@ class User
                 $this->isAdmin            );
             */
         } else {
-            self::$stmt = $app->db->prepare(self::UPDATE_QUERY);
-            self::$stmt->bind_param("ssssii", $username, $password, $email,$bio,$isAdmin,$id);
+            $stmt = self::$app->db->prepare(self::UPDATE_QUERY);
+            $stmt->bind_param("ssssii", $username, $password, $email,$bio,$isAdmin,$id);
           /*
           $query = sprintf(self::UPDATE_QUERY,
                 $this->username,
@@ -74,7 +73,7 @@ class User
 
     function delete()
     {
-        $stmt = $app->db->prepare(self::INSERT_QUERY);
+        $stmt = self::$app->db->prepare(self::INSERT_QUERY);
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
@@ -147,7 +146,7 @@ class User
      */
     static function findById($userid)
     {
-        $stmt = $db->prepare(self::FIND_BY_ID_QUERY);
+        $stmt = self::$db->prepare(self::FIND_BY_ID_QUERY);
         $stmt->bind_param("i", this::$id);
         $stmt->execute();
 
@@ -169,7 +168,7 @@ class User
      */
     static function findByUser($username)
     {
-        $stmt = $db->prepare(self::FIND_BY_NAME_QUERY);
+        $stmt = self::$db->prepare(self::FIND_BY_NAME_QUERY);
         $stmt->bind_param("s", this::$username);
         $stmt->execute();
 
