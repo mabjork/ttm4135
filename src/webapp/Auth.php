@@ -38,6 +38,7 @@ class Auth
      */
     static function check()
     {
+	//return false;
         return isset($_SESSION['userid']);
     }
 
