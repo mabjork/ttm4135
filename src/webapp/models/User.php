@@ -78,7 +78,7 @@ class User
           */
         }
 
-        return self::$stmt->execute();
+        return $stmt->execute();
     }
 
     function delete()
@@ -157,11 +157,10 @@ class User
     static function findById($userid)
     {
         $stmt = self::$app->db->prepare(self::FIND_BY_ID_QUERY);
-        $stmt->bind_param(1, $this->id);
+        $stmt->bindParam(1, $userid);
         $stmt->execute();
 
-        $result = $stmt->get_result();
-        $row = $result->fetch();
+        $row = $stmt->fetch();
 
         if($row == false) {
             return null;
@@ -179,11 +178,10 @@ class User
     static function findByUser($username)
     {
         $stmt = self::$app->db->prepare(self::FIND_BY_NAME_QUERY);
-        $stmt->bindParam(1, $this->username);
+        $stmt->bindParam(1, $username);
         $stmt->execute();
-
-        $result = $stmt->get_result();
-        $row = $result->fetch();
+;
+        $row = $stmt->fetch();
 
         if($row == false) {
             return null;
