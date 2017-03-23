@@ -32,13 +32,15 @@ class LoginController extends Controller
         $request = $this->app->request;
         $username = $request->post('username');
         $password = $request->post('password');
-        if (isset($_SESSION["token"])) {
-            if ($_SESSION["token"] != $request->post("csrf_token")) {
-                $this->app->flashNow('error', 'Wrong token');
-                $this->app->redirect('/');
-                return;
-            }
+        /*
+        if (!isset($_SESSION["token"])) {
+          $this->app->flashNow('error', 'Wrong token');
+          $this->app->redirect('/');
+        }elseif ($_SESSION["token"] != $request->post("csrf_token")) {
+          $this->app->flashNow('error', 'Wrong token');
+          $this->app->redirect('/');
         }
+        */
 
         #was us
         $cookie_name = "user";
