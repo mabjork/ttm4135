@@ -15,7 +15,8 @@ class UserController extends Controller
     function index()
     {
         if (Auth::guest()) {
-            $this->render('newUserForm.twig', []);
+            $_SESSION["token"] = md5(uniqid(mt_rand(), true));
+            $this->render('newUserForm.twig', ['csrf_token' = $_SESSION["token"]]);
         } else {
             $username = Auth::user()->getUserName();
             $this->app->flash('info', 'You are already logged in as ' . $username);
@@ -32,12 +33,19 @@ class UserController extends Controller
     	if (!$issuer||!$rightissuer){
             $this->setFlashMessage('You must be a member of ttm4135 to register.','error');
             $this->app->flashNow('error', 'You must be a member of ttm4135 to register.');
-    		$this->app->redirect('/register');
+    		    $this->app->redirect('/register');
     	}
 
         $request = $this->app->request;
         $username = $request->post('username');
         $password = $request->post('password');
+        if (isset($_SESSION["token"])) {
+            if ($_SESSION["token"] != $request->post("csrf_token")) {
+                $this->app->flashNow('error', 'Wrong token');
+                $this->app->redirect('/register');
+                return;
+            }
+        }
 
 
         $user = User::makeEmpty();

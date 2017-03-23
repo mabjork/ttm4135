@@ -22,7 +22,8 @@ class LoginController extends Controller
                 $username = $_COOKIE["user"];
             else
                 $username = false;
-            $this->render('login.twig', ['title'=>"Login","username" =>$username]);
+            $_SESSION["token"] = md5(uniqid(mt_rand(), true));
+            $this->render('login.twig', ['title'=>"Login","username" =>$username,'csrf_token' =>$_SESSION["token"]]);
         }
     }
 
@@ -31,11 +32,18 @@ class LoginController extends Controller
         $request = $this->app->request;
         $username = $request->post('username');
         $password = $request->post('password');
+        if (isset($_SESSION["token"])) {
+            if ($_SESSION["token"] != $request->post("csrf_token")) {
+                $this->app->flashNow('error', 'Wrong token');
+                $this->app->redirect('/');
+                return;
+            }
+        }
 
-        #was us       
+        #was us
         $cookie_name = "user";
         $cookie_value = $username;
-        setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
+        setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
 
         if ( Auth::checkCredentials($username, $password) ) {
             $user = User::findByUser($username);
@@ -49,11 +57,11 @@ class LoginController extends Controller
     }
 
     function logout()
-    {   
+    {
         Auth::logout();
         $this->app->flashNow('info', 'Logged out successfully!!');
         $this->render('base.twig', []);
         return;
-       
+
     }
 }
