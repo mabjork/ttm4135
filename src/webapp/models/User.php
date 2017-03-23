@@ -42,6 +42,10 @@ class User
      */
     function save()
     {
+        $this->username = htmlspecialchars($this->username);
+        $this->email = htmlspecialchars($this->email);
+        $this->bio = htmlspecialchars($this->bio);
+        
         if ($this->id === null) {
             $stmt = self::$app->db->prepare(self::INSERT_QUERY);
             $stmt->bindParam(1, $this->username);
@@ -83,8 +87,8 @@ class User
 
     function delete()
     {
-        $stmt = self::$app->db->prepare(self::INSERT_QUERY);
-        $stmt->bind_param(1, $id);
+        $stmt = self::$app->db->prepare(self::DELETE_QUERY);
+        $stmt->bindParam(1, $this->id);
         return $stmt->execute();
     }
 
