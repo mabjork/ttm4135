@@ -26,7 +26,7 @@ class Sql
     static function insertDummyUsers() {
 
 
-        $q1 = "INSERT INTO users(username, password, isadmin) VALUES ('admin', 'admin', 1)";
+        $q1 = "INSERT INTO users(username, password, isadmin) VALUES ('admin', '31admin31'/*password_hash('admin',PASSWORD_BCRYPT)*/, 1)";
         $q2 = "INSERT INTO users(username, password) VALUES ('bob', 'bob')";
 
         self::$pdo->exec($q1);

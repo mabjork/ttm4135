@@ -28,10 +28,10 @@ class UserController extends Controller
         
         $issuer = (isset($_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN']))?$_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN']:false;
         $rightissuer = in_array($issuer,array('Student CA','Staff CA'));
-        
+	//echo'qwerasdf';var_dump($rightissuer);exit;
     	if (!$issuer||!$rightissuer){
-            //$this->setFlashMessage('You must be a member of ttm4135 to register. Besides, I should change some code...','error');
-            $this->app->flashNow('error', 'You must be a member of ttm4135 to register. Besides, I should change some code...');
+            $this->setFlashMessage('You must be a member of ttm4135 to register.','error');
+            $this->app->flashNow('error', 'You must be a member of ttm4135 to register.');
     		$this->app->redirect('/register');
     	}
         $request = $this->app->request;
