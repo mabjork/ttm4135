@@ -4,11 +4,11 @@ namespace ttm4135\webapp\models;
 
 class User
 {
-    const INSERT_QUERY = "INSERT INTO users(username, password, email, bio, isadmin) VALUES('%s', '%s', '%s' , '%s' , '%s')";
-    const UPDATE_QUERY = "UPDATE users SET username='%s', password='%s', email='%s', bio='%s', isadmin='%s' WHERE id='%s'";
-    const DELETE_QUERY = "DELETE FROM users WHERE id='%s'";
-    const FIND_BY_NAME_QUERY = "SELECT * FROM users WHERE username='%s'";
-    const FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id='%s'";
+    const INSERT_QUERY = "INSERT INTO users(username, password, email, bio, isadmin) VALUES(?, ?, ? , ? , ?)";
+    const UPDATE_QUERY = "UPDATE users SET username=?, password=?, email=?, bio=?, isadmin=? WHERE id=?";
+    const DELETE_QUERY = "DELETE FROM users WHERE id=?";
+    const FIND_BY_NAME_QUERY = "SELECT * FROM users WHERE username=?";
+    const FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id=?";
     protected $id = null;
     protected $username;
     protected $password;
@@ -44,7 +44,11 @@ class User
     {
         if ($this->id === null) {
             $stmt = self::$app->db->prepare(self::INSERT_QUERY);
-            $stmt->bind_param("ssssi", $username, $password, $email,$bio,$isAdmin);
+            $stmt->bindParam(1, $username);
+            $stmt->bindParam(2, $password);
+            $stmt->bindParam(3, $email);
+            $stmt->bindParam(4, $bio);
+            $stmt->bindParam(5, $isAdmin);
             /*
             $query = sprintf(self::INSERT_QUERY,
                 $this->username,
@@ -56,6 +60,12 @@ class User
         } else {
             $stmt = self::$app->db->prepare(self::UPDATE_QUERY);
             $stmt->bind_param("ssssii", $username, $password, $email,$bio,$isAdmin,$id);
+            $stmt->bindParam(1, $username);
+            $stmt->bindParam(2, $password);
+            $stmt->bindParam(3, $email);
+            $stmt->bindParam(4, $bio);
+            $stmt->bindParam(5, $isAdmin);
+            $stmt->bindParam(6, $id);
           /*
           $query = sprintf(self::UPDATE_QUERY,
                 $this->username,
@@ -74,7 +84,7 @@ class User
     function delete()
     {
         $stmt = self::$app->db->prepare(self::INSERT_QUERY);
-        $stmt->bind_param("i", $id);
+        $stmt->bind_param(1, $id);
         return $stmt->execute();
     }
 
@@ -146,8 +156,8 @@ class User
      */
     static function findById($userid)
     {
-        $stmt = self::$db->prepare(self::FIND_BY_ID_QUERY);
-        $stmt->bind_param("i", this::$id);
+        $stmt = self::$app->db->prepare(self::FIND_BY_ID_QUERY);
+        $stmt->bind_param(1, this::$id);
         $stmt->execute();
 
         $result = $stmt->get_result();
@@ -168,8 +178,8 @@ class User
      */
     static function findByUser($username)
     {
-        $stmt = self::$db->prepare(self::FIND_BY_NAME_QUERY);
-        $stmt->bind_param("s", this::$username);
+        $stmt = self::$app->db->prepare(self::FIND_BY_NAME_QUERY);
+        $stmt->bindParam(1, this::$username);
         $stmt->execute();
 
         $result = $stmt->get_result();
