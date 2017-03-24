@@ -14,6 +14,7 @@ class UserController extends Controller
 
     function index()
     {
+
         $issuer = (isset($_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN']))?$_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN']:false;
         $rightissuer = in_array($issuer,array('Student CA','Staff CA'));
     //echo'qwerasdf';var_dump($rightissuer);exit;
@@ -24,7 +25,7 @@ class UserController extends Controller
         }
         if (Auth::guest()) {
             $_SESSION["token"] = md5(uniqid(mt_rand(), true));
-            $this->render('newUserForm.twig', ['csrf_token' = $_SESSION["token"]]);
+            $this->render('newUserForm.twig', array('csrf_token' => $_SESSION["token"]));
         } else {
             $username = Auth::user()->getUserName();
             $this->app->flash('info', 'You are already logged in as ' . $username);
