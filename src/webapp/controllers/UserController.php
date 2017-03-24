@@ -23,6 +23,7 @@ class UserController extends Controller
             $this->app->flashNow('error', 'You must be a member of ttm4135 to register.');
             $this->app->redirect('/');
         }
+
         if (Auth::guest()) {
             $_SESSION["token"] = md5(uniqid(mt_rand(), true));
             $this->render('newUserForm.twig', array('csrf_token' => $_SESSION["token"]));
@@ -41,7 +42,7 @@ class UserController extends Controller
 	//echo'qwerasdf';var_dump($rightissuer);exit;
     	if (!$issuer||!$rightissuer){
             $this->setFlashMessage('You must be a member of ttm4135 to register.','error');
-            $this->app->flashNow('error', 'You must be a member of ttm4135 to register.');
+            $this->app->flash('error', 'You must be a member of ttm4135 to register.');
     		    $this->app->redirect('/register');
     	}
 

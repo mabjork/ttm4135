@@ -44,6 +44,11 @@ class LoginController extends Controller
         }
 	
 	*/
+        $attempt = Auth::attempt();
+        if(!$attempt){
+            $this->setFlashMessage("You are entering passwords to often. Wait ".Auth::$cooldown." seconds",'error');
+            $this->render('login.twig', []);
+        }
         #was us
         $cookie_name = "user";
         $cookie_value = $username;
