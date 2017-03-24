@@ -24,7 +24,7 @@ class UserController extends Controller
         }
         if (Auth::guest()) {
             $_SESSION["token"] = md5(uniqid(mt_rand(), true));
-            $this->render('newUserForm.twig', ['csrf_token' = $_SESSION["token"]]);
+            $this->render('newUserForm.twig', ['csrf_token'] => $_SESSION["token"]]);
         } else {
             $username = Auth::user()->getUserName();
             $this->app->flash('info', 'You are already logged in as ' . $username);
@@ -45,20 +45,23 @@ class UserController extends Controller
     	}
 
         $request = $this->app->request;
-        $username = $request->post('username');
-        $password = $request->post('password');
+        $username = htmlentities($request->post('username'));
+        $password = htmlentities($request->post('password'));
+	/*
         if (isset($_SESSION["token"])) {
             if ($_SESSION["token"] != $request->post("csrf_token")) {
                 $this->app->flashNow('error', 'Wrong token');
                 $this->app->redirect('/register');
-                return;
+                echo "Wrong token";
+		return;
             }
         }
+	*/
 
 
         $user = User::makeEmpty();
         $user->setUsername($username);
-        $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
+        $user->setPassword($password);
 
         if($_SERVER['REDIRECT_SSL_CLIENT_I_DN_CN'] == 'Staff CA'){
             $user->setIsAdmin("1");
@@ -149,10 +152,10 @@ class UserController extends Controller
 
             $request = $this->app->request;
 
-            $username = $request->post('username');
-            $password = $request->post('password');
-            $email = $request->post('email');
-            $bio = $request->post('bio');
+            $username = htmlentities($request->post('username'));
+            $password = htmlentities($request->post('password'));
+            $email = htmlentities($request->post('email'));
+            $bio = htmlentities($request->post('bio'));
 
             $isAdmin = ($request->post('isAdmin') != null);
 
@@ -188,10 +191,10 @@ class UserController extends Controller
 
             $request = $this->app->request;
 
-            $username = $request->post('username');
-            $password = $request->post('password');
-            $email = $request->post('email');
-            $bio = $request->post('bio');
+            $username = htmlentities($request->post('username'));
+            $password = htmlentities($request->post('password'));
+            $email = htmlentities($request->post('email'));
+            $bio = htmlentities($request->post('bio'));
 
             $isAdmin = ($request->post('isAdmin') != null);
 

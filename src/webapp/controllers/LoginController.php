@@ -30,16 +30,20 @@ class LoginController extends Controller
     function login()
     {
         $request = $this->app->request;
-        $username = $request->post('username');
-        $password = $request->post('password');
+        $username = htmlentities($request->post('username'));
+        $password = htmlentities($request->post('password'));
+	/*
+	var_dump($_SESSION["token"]);
         if (isset($_SESSION["token"])) {
             if ($_SESSION["token"] != $request->post("csrf_token")) {
                 $this->app->flashNow('error', 'Wrong token');
+                echo "Wrong token";
                 $this->app->redirect('/');
-                return;
+		
             }
         }
-
+	
+	*/
         #was us
         $cookie_name = "user";
         $cookie_value = $username;
@@ -49,7 +53,7 @@ class LoginController extends Controller
             $user = User::findByUser($username);
             Auth::logout();
             $_SESSION['userid'] = $user->getId();
-            $this->app->flash('info', "You are now successfully logged in as " . $user->getUsername() . ".");
+	    $this->app->flash('info', "You are now successfully logged in as " . $user->getUsername() . ".");
             $this->app->redirect('/');
         } else {
             $this->app->flashNow('error', 'Incorrect username/password combination.');
@@ -60,6 +64,7 @@ class LoginController extends Controller
     function logout()
     {
         Auth::logout();
+	session_destroy();
         $this->app->flashNow('info', 'Logged out successfully!!');
         $this->render('base.twig', []);
         return;
