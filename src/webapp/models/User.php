@@ -64,23 +64,23 @@ class User
                 $this->isAdmin            );
             */
         } else {
-	    if($this->password){
-		    $stmt = self::$app->db->prepare(self::UPDATE_QUERY);
-		    $stmt->bindParam(1, $this->username);
-		    $stmt->bindParam(2, $this->password);
-		    $stmt->bindParam(3, $this->email);
-		    $stmt->bindParam(4, $this->bio);
-		    $stmt->bindParam(5, $this->isAdmin);
-		    $stmt->bindParam(6, $this->id);
-	    }else{
-	    	if($this->password){
-		    $stmt = self::$app->db->prepare(self::UPDATE_QUERY2);
-		    $stmt->bindParam(1, $this->username);
-		    $stmt->bindParam(3, $this->email);
-		    $stmt->bindParam(4, $this->bio);
-		    $stmt->bindParam(5, $this->isAdmin);
-		    $stmt->bindParam(6, $this->id);
-
+			if($this->password){
+				$stmt = self::$app->db->prepare(self::UPDATE_QUERY);
+				$stmt->bindParam(1, $this->username);
+				$stmt->bindParam(2, $this->password);
+				$stmt->bindParam(3, $this->email);
+				$stmt->bindParam(4, $this->bio);
+				$stmt->bindParam(5, $this->isAdmin);
+				$stmt->bindParam(6, $this->id);
+			}else{
+				if($this->password){
+				$stmt = self::$app->db->prepare(self::UPDATE_QUERY2);
+				$stmt->bindParam(1, $this->username);
+				$stmt->bindParam(3, $this->email);
+				$stmt->bindParam(4, $this->bio);
+				$stmt->bindParam(5, $this->isAdmin);
+				$stmt->bindParam(6, $this->id);
+			}
 		}
           /*
           $query = sprintf(self::UPDATE_QUERY,
