@@ -43,6 +43,7 @@ class User
     function save()
     {
         $this->username = htmlspecialchars($this->username);
+	// $this->password = htmlspecialchars($this->password);
         $this->email = htmlspecialchars($this->email);
         $this->bio = htmlspecialchars($this->bio);
         
@@ -63,7 +64,7 @@ class User
             */
         } else {
             $stmt = self::$app->db->prepare(self::UPDATE_QUERY);
-            $stmt->bind_param("ssssii", $username, $password, $email,$bio,$isAdmin,$id);
+            // $stmt->bindParam("ssssii", $username, $password, $email,$bio,$isAdmin,$id);
             $stmt->bindParam(1, $this->username);
             $stmt->bindParam(2, $this->password);
             $stmt->bindParam(3, $this->email);
@@ -134,7 +135,7 @@ class User
 
     function setPassword($password)
     {
-        $this->password = $password;
+        $this->password = password_hash($password,PASSWORD_BCRYPT);
     }
 
     function setEmail($email)
