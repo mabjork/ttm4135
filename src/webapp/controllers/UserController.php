@@ -49,7 +49,8 @@ class UserController extends Controller
 
         $username = htmlentities($request->post('username'));
         $password = htmlentities($request->post('password'));
-
+	if(preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{8,14}$/', $password)){
+		
 
         $user = User::makeEmpty();
         $user->setUsername($username);
@@ -73,8 +74,12 @@ class UserController extends Controller
         $user->save();
         $this->app->flash('info', 'Thanks for creating a user. You may now log in.');
         $this->app->redirect('/login');
-    }
 
+	}else {
+	echo "<script type='text/javascript'>alert('Passord must contain letters and numbers and be 8-14 charachters long');</script>";
+	$this->render('newUserForm.twig', ['username' => $username]);
+	}
+	}
     function delete($tuserid)
     {
         if(Auth::userAccess($tuserid))
@@ -130,7 +135,7 @@ class UserController extends Controller
         } else {
             $username = Auth::user()->getUserName();
             $this->app->flash('info', 'You do not have access this resource. You are logged in as ' . $username);
-            $this->app->redirect('/');
+            $this->app->redirect('/register');
         }
     }
 
