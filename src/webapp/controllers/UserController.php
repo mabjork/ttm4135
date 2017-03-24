@@ -193,7 +193,8 @@ class UserController extends Controller
 
 
             $user->setUsername($username);
-            $user->setPassword($password);
+	    if ($password)
+            	$user->setPassword($password);
             $user->setBio($bio);
             $user->setEmail($email);
             $user->setIsAdmin($isAdmin);
