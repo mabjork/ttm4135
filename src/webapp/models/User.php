@@ -6,6 +6,7 @@ class User
 {
     const INSERT_QUERY = "INSERT INTO users(username, password, email, bio, isadmin) VALUES(?, ?, ? , ? , ?)";
     const UPDATE_QUERY = "UPDATE users SET username=?, password=?, email=?, bio=?, isadmin=? WHERE id=?";
+    const UPDATE_QUERY2 = "UPDATE users SET username=?, email=?, bio=?, isadmin=? WHERE id=?";
     const DELETE_QUERY = "DELETE FROM users WHERE id=?";
     const FIND_BY_NAME_QUERY = "SELECT * FROM users WHERE username=?";
     const FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id=?";
@@ -63,13 +64,24 @@ class User
                 $this->isAdmin            );
             */
         } else {
-            $stmt = self::$app->db->prepare(self::UPDATE_QUERY);
-            $stmt->bindParam(1, $this->username);
-            $stmt->bindParam(2, $this->password);
-            $stmt->bindParam(3, $this->email);
-            $stmt->bindParam(4, $this->bio);
-            $stmt->bindParam(5, $this->isAdmin);
-            $stmt->bindParam(6, $this->id);
+	    if($this->password){
+		    $stmt = self::$app->db->prepare(self::UPDATE_QUERY);
+		    $stmt->bindParam(1, $this->username);
+		    $stmt->bindParam(2, $this->password);
+		    $stmt->bindParam(3, $this->email);
+		    $stmt->bindParam(4, $this->bio);
+		    $stmt->bindParam(5, $this->isAdmin);
+		    $stmt->bindParam(6, $this->id);
+	    }else{
+	    	if($this->password){
+		    $stmt = self::$app->db->prepare(self::UPDATE_QUERY2);
+		    $stmt->bindParam(1, $this->username);
+		    $stmt->bindParam(3, $this->email);
+		    $stmt->bindParam(4, $this->bio);
+		    $stmt->bindParam(5, $this->isAdmin);
+		    $stmt->bindParam(6, $this->id);
+
+		}
           /*
           $query = sprintf(self::UPDATE_QUERY,
                 $this->username,

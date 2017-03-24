@@ -6,6 +6,7 @@ use ttm4135\webapp\models\User;
 
 class Auth
 {
+    public static $cooldown = 10;
     function __construct()
     {
     }
@@ -92,5 +93,29 @@ class Auth
         session_destroy();
         session_start();
         session_regenerate_id();
+    }
+
+    static function attempt()
+    {
+        //return 1;
+        $S = &$_SESSION;
+        $s_a = 'login_attempt';
+        $ct = time();
+        $mat = 3;//max attempts
+        $cd = self::$cooldown;
+
+        $S[$s_a.$ct] = $ct;
+        $an = 0;//attempts number
+        foreach ($S as $key => $t) {
+            if(preg_match("~^{$s_a}~", $key)){
+                if($ct-$t > $cd){
+                    unset($S[$key]);
+                }else{
+                    $an++;
+                }
+            }
+        }
+        $ret = ($an<=$mat)?1:0;
+        return $ret;
     }
 }
