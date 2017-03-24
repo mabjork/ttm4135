@@ -1,8 +1,8 @@
 <?php
 
 //change from E_all to 0, and on to 0 to avoid sending errormessages with info to hackers
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
+error_reporting(0);
+ini_set('display_errors', 0);
 
 if (! extension_loaded('openssl')) {
     die('You must enable the openssl extension.');
