@@ -64,7 +64,6 @@ class User
             */
         } else {
             $stmt = self::$app->db->prepare(self::UPDATE_QUERY);
-            // $stmt->bindParam("ssssii", $username, $password, $email,$bio,$isAdmin,$id);
             $stmt->bindParam(1, $this->username);
             $stmt->bindParam(2, $this->password);
             $stmt->bindParam(3, $this->email);
